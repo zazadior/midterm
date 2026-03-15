@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven3'
+        jdk 'JDK21'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'master',
+                    url: 'https://github.com/zazadior/midterm.git'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh './mvnw clean package -DskipTests'
+            }
+        }
+
+        stage('Archive Artifact') {
+            steps {
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            }
+        }
+    }
+}
+
